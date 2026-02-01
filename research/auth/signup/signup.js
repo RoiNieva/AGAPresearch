@@ -6,6 +6,7 @@ import { goNext, goBack } from "./logic/navigation.js";
 import { saveDraft, loadDraft, clearDraft } from "./data/draft.js";
 import { submitSignup } from "./api/submit.js";
 import { readFormIntoState } from "./data/formState.js";
+import { toggleTheme } from "../../js/theme.js";  
 
 $("#year").textContent = new Date().getFullYear().toString();
 
@@ -26,6 +27,11 @@ document.querySelectorAll('input[name="role"]').forEach(r => {
     showStep("role");
   });
 });
+export function toggleTheme() {
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem(K.theme, isDark ? "light" : "dark");
+  applyTheme();
+}
 
 // Init
 showStep("role");

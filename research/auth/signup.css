@@ -313,3 +313,10 @@ input:focus, select:focus, textarea:focus{
   justify-content:center;
   font-size: 12px;
 }
+/* Dark mode tuning */
+body.dark .bg-gradient{
+  filter: blur(22px);
+}
+body.dark .blob-1{ background: rgba(13,148,136,.28); }
+body.dark .blob-2{ background: rgba(59,130,246,.18); }
+body.dark .blob-3{ background: rgba(16,185,129,.14); }

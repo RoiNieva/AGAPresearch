@@ -8,8 +8,8 @@ export function applyTheme() {
   const logo = byId("siteLogo");
   if (logo) {
     logo.src = t === "dark"
-      ? "assets/logo/logo-dark.png"
-      : "assets/logo/logo-light.png";
+      ? "assets/logo/AGAP-logo.png"
+      : "assets/logo/AGAP-logo.png";
   }
 }
 
