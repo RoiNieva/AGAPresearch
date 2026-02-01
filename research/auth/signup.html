@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign up</title>
+  <link rel="stylesheet" href="./signup.css" />
+  <meta name="color-scheme" content="dark light" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="bg">
+    <div class="grid-overlay" aria-hidden="true"></div>
+    <div class="glow glow-a" aria-hidden="true"></div>
+    <div class="glow glow-b" aria-hidden="true"></div>
+  </div>
+
+  <main id="main" class="shell" tabindex="-1">
+    <header class="top">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-text">
+          <div class="brand-title">AGAP</div>
+          <div class="brand-sub">Secure onboarding • Clear steps • Less errors</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="btnLoadDraft" class="btn ghost" type="button">Load draft</button>
+        <button id="btnClearDraft" class="btn ghost" type="button">Clear draft</button>
+      </div>
+    </header>
+
+    <section class="card" aria-labelledby="signupTitle">
+      <div class="card-head">
+        <div>
+          <h1 id="signupTitle">Create your account</h1>
+          <p class="muted" id="signupSubtitle">Choose your role to begin.</p>
+        </div>
+        <div class="status">
+          <span id="roleBadge" class="badge hidden">Role</span>
+          <span id="stepBadge" class="badge hidden">Step</span>
+        </div>
+      </div>
+
+      <!-- Stepper -->
+      <div class="stepper hidden" id="stepper" aria-label="Signup progress">
+        <div class="stepper-line" aria-hidden="true">
+          <div id="stepperProgress" class="stepper-progress"></div>
+        </div>
+        <ol id="stepperList" class="stepper-list" aria-live="polite"></ol>
+      </div>
+
+      <!-- Form -->
+      <form id="signupForm" novalidate>
+        <!-- STEP: ROLE -->
+        <section class="step" data-step="role">
+          <h2 class="step-title">Choose your role</h2>
+          <p class="muted">This changes the signup requirements.</p>
+
+          <div class="role-grid" role="radiogroup" aria-label="Select role">
+            <label class="role-card">
+              <input type="radio" name="role" value="client" />
+              <div class="role-card-inner">
+                <div class="role-icon" aria-hidden="true">👤</div>
+                <div class="role-name">Client</div>
+                <div class="role-desc">Book services, chat, and leave reviews.</div>
+              </div>
+            </label>
+
+            <label class="role-card">
+              <input type="radio" name="role" value="provider" />
+              <div class="role-card-inner">
+                <div class="role-icon" aria-hidden="true">🛠️</div>
+                <div class="role-name">Provider</div>
+                <div class="role-desc">Offer services, set availability, get booked.</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="hint">
+            Tip: Providers must complete a review page before confirmation.
+          </div>
+        </section>
+
+        <!-- STEP: ACCOUNT -->
+        <section class="step hidden" data-step="account">
+          <h2 class="step-title">Account</h2>
+          <p class="muted">Your login credentials.</p>
+
+          <div class="grid">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required />
+              <div class="error" data-error-for="email"></div>
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required />
+              <div class="error" data-error-for="password"></div>
+              <div class="help">At least 8 characters.</div>
+            </div>
+
+            <div class="field">
+              <label for="confirmPassword">Confirm password</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required />
+              <div class="error" data-error-for="confirmPassword"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP: PROFILE -->
+        <section class="step hidden" data-step="profile">
+          <h2 class="step-title">Profile</h2>
+          <p class="muted">Basic identity info.</p>
+
+          <div class="grid">
+            <div class="field">
+              <label for="fullName">Full name</label>
+              <input id="fullName" name="fullName" type="text" autocomplete="name" required />
+              <div class="error" data-error-for="fullName"></div>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
+              <div class="error" data-error-for="phone"></div>
+            </div>
+
+            <div class="field">
+              <label for="address">Address</label>
+              <input id="address" name="address" type="text" autocomplete="street-address" />
+              <div class="help">Optional for clients. Recommended for providers.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP: PROVIDER PROFESSIONAL -->
+        <section class="step hidden" data-step="providerProfessional">
+          <h2 class="step-title">Professional details</h2>
+          <p class="muted">Shown to clients when they browse providers.</p>
+
+          <div class="grid">
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category" name="category" required>
+                <option value="" selected disabled>Select</option>
+                <option>Home Services</option>
+                <option>Beauty & Wellness</option>
+                <option>Repair & Maintenance</option>
+                <option>Tutoring</option>
+                <option>Other</option>
+              </select>
+              <div class="error" data-error-for="category"></div>
+            </div>
+
+            <div class="field">
+              <label for="experienceYears">Years of experience</label>
+              <input id="experienceYears" name="experienceYears" type="number" min="0" max="60" required />
+              <div class="error" data-error-for="experienceYears"></div>
+            </div>
+
+            <div class="field full">
+              <label for="bio">Short bio</label>
+              <textarea id="bio" name="bio" rows="4" maxlength="500" required></textarea>
+              <div class="help">Max 500 characters.</div>
+              <div class="error" data-error-for="bio"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP: PROVIDER REQUIREMENTS -->
+        <section class="step hidden" data-step="providerRequirements">
+          <h2 class="step-title">Requirements</h2>
+          <p class="muted">Upload can be handled by your backend; for now we collect links/IDs.</p>
+
+          <div class="grid">
+            <div class="field">
+              <label for="govId">Government ID number</label>
+              <input id="govId" name="govId" type="text" required />
+              <div class="error" data-error-for="govId"></div>
+            </div>
+
+            <div class="field">
+              <label for="portfolioUrl">Portfolio link</label>
+              <input id="portfolioUrl" name="portfolioUrl" type="url" placeholder="https://..." />
+              <div class="help">Optional but recommended.</div>
+            </div>
+
+            <div class="field full">
+              <label for="certNotes">Certifications / notes</label>
+              <textarea id="certNotes" name="certNotes" rows="3" maxlength="500"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP: PROVIDER AVAILABILITY -->
+        <section class="step hidden" data-step="providerAvailability">
+          <h2 class="step-title">Availability</h2>
+          <p class="muted">Pick days you’re typically available.</p>
+
+          <div class="chips" role="group" aria-label="Available days">
+            <label class="chip"><input type="checkbox" name="days" value="Mon">Mon</label>
+            <label class="chip"><input type="checkbox" name="days" value="Tue">Tue</label>
+            <label class="chip"><input type="checkbox" name="days" value="Wed">Wed</label>
+            <label class="chip"><input type="checkbox" name="days" value="Thu">Thu</label>
+            <label class="chip"><input type="checkbox" name="days" value="Fri">Fri</label>
+            <label class="chip"><input type="checkbox" name="days" value="Sat">Sat</label>
+            <label class="chip"><input type="checkbox" name="days" value="Sun">Sun</label>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="timeFrom">From</label>
+              <input id="timeFrom" name="timeFrom" type="time" required />
+              <div class="error" data-error-for="timeFrom"></div>
+            </div>
+            <div class="field">
+              <label for="timeTo">To</label>
+              <input id="timeTo" name="timeTo" type="time" required />
+              <div class="error" data-error-for="timeTo"></div>
+            </div>
+          </div>
+
+          <div class="hint">You can fine-tune per-day availability later in your dashboard.</div>
+        </section>
+
+        <!-- STEP: PROVIDER REVIEW (provider only) -->
+        <section class="step hidden" data-step="providerReview">
+          <h2 class="step-title">Review & confirm</h2>
+          <p class="muted">Please double-check. You can edit any section before confirming.</p>
+
+          <div id="reviewContainer" class="review"></div>
+
+          <label class="confirm">
+            <input id="providerConfirm" type="checkbox" />
+            I confirm that the information above is accurate.
+          </label>
+          <div class="error" data-error-for="providerConfirm"></div>
+        </section>
+
+        <!-- Footer controls -->
+        <div class="footer">
+          <div class="left">
+            <button id="btnBack" class="btn ghost" type="button">Back</button>
+            <button id="btnSaveDraft" class="btn ghost" type="button">Save draft</button>
+          </div>
+          <div class="right">
+            <button id="btnNext" class="btn primary" type="button">Proceed</button>
+            <button id="btnSubmit" class="btn primary hidden" type="submit">Create account</button>
+          </div>
+        </div>
+
+        <div id="formMsg" class="form-msg" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <footer class="mini">
+      <span class="muted">© <span id="year"></span> AGAP • Thesis System</span>
+    </footer>
+  </main>
+
+  <script src="./js/signup/signup.js" type="module"></script>
+
+</body>
+</html>

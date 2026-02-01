@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGAP | Services Right Away</title>
+  <link rel="stylesheet" href="style.css" />
+ <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="logo" data-action="home" role="button" tabindex="0" aria-label="Go to Home">
+        <img id="siteLogo" src="assets/logo/logo-light.png" alt="AGAP Logo" />
+      </div>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">☰</button>
+
+      <div class="nav-links" id="navMenu">
+        <button class="nav-link" data-action="home">Home</button>
+        <button class="nav-link" data-page="categories-page">Categories</button>
+        <button class="nav-link" data-page="map-page">Map</button>
+        <button class="nav-link" data-page="about-page">About</button>
+        <button class="nav-link" data-page="reviews-page">Reviews</button>
+
+        <button class="nav-link nav-cta" data-page="client-search">Find a Pro</button>
+
+        <button class="nav-link" id="navBell" data-action="notifications">
+          🔔 <span id="bellCount" class="badge hidden">0</span>
+        </button>
+
+        <!-- Dashboards (shown/hidden by JS) -->
+        <button class="nav-link hidden" id="navClientDash" data-page="client-dashboard">Client Dashboard</button>
+        <button class="nav-link hidden" id="navProviderDash" data-page="provider-dashboard">Provider Dashboard</button>
+        <button class="nav-link hidden" id="navAdmin" data-page="admin-page">Admin</button>
+        <button class="nav-link hidden" id="navLogout" data-action="logout">Logout</button>
+        <button class="nav-link" id="navTheme" data-action="toggleTheme">🌓</button>
+      </div>
+    </div>
+  </nav>
+
+  <div id="site-bg" class="site-bg" aria-hidden="true">
+  <div class="bg-gradient"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+
+  <main id="main">
+    <!-- LANDING -->
+    <section id="landing-page" class="hero-section">
+   
+
+      <div class="hero-content">
+        <h1>AGAP Services</h1>
+        <p>Find reliable pros near you in seconds.</p>
+
+        <div class="main-buttons">
+          <button class="main-btn" data-page="provider-signup">Offer Services</button>
+          <button class="main-btn" data-page="client-search">Find Services</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGAP SECTION -->
+    <section id="agap-section" class="agap-section">
+      <div class="agap-header">
+        <h2 class="agap-title">AGAP Philippines</h2>
+        <p class="agap-tagline">Connecting Filipinos to Trusted Services.</p>
+      </div>
+
+      <div class="agap-grid">
+        <div class="card agap-card"><h3>A — Access</h3><p>Access connects people to reliable services quickly and easily.</p></div>
+        <div class="card agap-card"><h3>G — Growth</h3><p>Growth empowers Filipino workers through meaningful opportunities.</p></div>
+        <div class="card agap-card"><h3>A — Assistance</h3><p>Assistance delivers trusted help when it matters most.</p></div>
+        <div class="card agap-card"><h3>P — People</h3><p>People are at the heart of every service and community we serve.</p></div>
+      </div>
+
+      <div class="agap-branding card">
+        <p><strong>AGAP Philippines</strong> provides easy access to reliable assistance while promoting growth and opportunity
+          for Filipino workers across multiple industries.</p>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section id="categories-page" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>Service Categories</h2>
+          <p class="muted">Pick a category to view providers.</p>
+
+          <div id="category-grid" class="category-grid"></div>
+
+          <div class="divider"></div>
+          <h3 id="category-selected-title" class="mini-title">Select a category above</h3>
+          <div id="category-selected-results" class="results-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- MAP PAGE -->
+<section id="map-page" class="page hidden">
+  <div class="container">
+    <div class="card wide-card">
+      <button class="back-link" data-action="home">← Back</button>
+      <h2>Map</h2>
+
+      <div id="map" class="map-canvas"></div>
+
+      <p class="muted tiny" style="margin-top:10px;">
+        📍 Providers near you
+      </p>
+    </div>
+  </div>
+</section>
+
+
+    <!-- ABOUT -->
+    <section id="about-page" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>About AGAP</h2>
+          <p class="lead">
+            AGAP is a Filipino-first service platform connecting people with trusted providers — fast, simple, and reliable.
+          </p>
+
+          <div class="two-col">
+            <div class="card soft">
+              <h3>Mission</h3>
+              <p>Help every Filipino find reliable services in seconds and empower providers with more opportunities.</p>
+            </div>
+            <div class="card soft">
+              <h3>Vision</h3>
+              <p>A Philippines where finding help is easy, safe, and fair — for both customers and workers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENT AUTH -->
+    <section id="client-auth" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>Client Account</h2>
+
+          <div class="two-col">
+            <div class="card soft">
+              <h3>Sign In</h3>
+              <form>
+              <label class="field-label" for="client-login-email">Email</label>
+              <input id="client-login-email" type="email" placeholder="you@email.com" />
+
+              <label class="field-label" for="client-login-password">Password</label>
+                <input id="client-login-password" type="password" placeholder="••••••••" />
+              
+
+              <button class="primary-btn" data-action="clientSignIn">Sign In</button>
+              </form>
+              <p class="muted tiny">No account yet? Use Sign Up on the right.</p>
+            </div>
+
+            <div class="card soft">
+              <h3>Sign Up</h3>
+              <form>
+              <label class="field-label" for="client-signup-name">Full Name</label>
+              <input id="client-signup-name" type="text" placeholder="Your Name" />
+
+              <label class="field-label" for="client-signup-email">Email</label>
+              <input id="client-signup-email" type="email" placeholder="you@email.com" />
+
+              <label class="field-label" for="client-signup-password">Password</label>
+                <input id="client-signup-password" type="password" placeholder="Create password" />
+              
+
+              <label class="field-label" for="client-signup-password2">Confirm Password</label>
+              
+                <input id="client-signup-password2" type="password" placeholder="Confirm password" />
+
+              <button class="primary-btn" data-action="clientSignUp">Create Account</button>
+              </form>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVIDER SIGN UP (WIZARD: ACCOUNT LAST) -->
+<section id="provider-signup" class="page hidden">
+  <div class="container">
+    <div class="card wide-card wizard-card">
+      <button class="back-link" data-action="back" type="button">← Back</button>
+
+      <div class="wizard-head">
+        <div>
+          <h2>Provider Sign Up</h2>
+          <p class="muted tiny" id="pro-step-subtitle">Step 1 of 5 — Profile</p>
+        </div>
+
+        <div class="wizard-progress" aria-label="Signup progress">
+          <div class="wizard-bar">
+            <div class="wizard-bar-fill" id="pro-bar-fill"></div>
+          </div>
+          <div class="wizard-steps" id="pro-steps"></div>
+        </div>
+      </div>
+
+      <!-- Step 0: Profile (FIRST) -->
+      <div class="wizard-step" data-step="0">
+        <div class="card soft">
+          <h3>Profile</h3>
+
+          <label class="field-label" for="pro-name">Full Name</label>
+          <input id="pro-name" type="text" placeholder="Juan Dela Cruz" />
+
+          <label class="field-label" for="pro-city">City</label>
+          <input id="pro-city" type="text" placeholder="Manila" />
+
+          <label class="field-label" for="pro-date">Available Date</label>
+          <input id="pro-date" type="date" />
+
+          <label class="field-label" for="pro-time">Available Time</label>
+          <input id="pro-time" type="text" placeholder="e.g. 8am–5pm" />
+
+          <label class="field-label" for="pro-phone">Phone (optional)</label>
+          <input id="pro-phone" type="tel" inputmode="tel" placeholder="0917xxxxxxx" />
+
+          <label class="field-label" for="pro-messenger">Messenger link (optional)</label>
+          <input id="pro-messenger" type="text" placeholder="https://m.me/yourname" />
+        </div>
+      </div>
+
+      <!-- Step 1: Pricing & Radius -->
+      <div class="wizard-step hidden" data-step="1">
+        <div class="card soft">
+          <h3>Pricing & Radius</h3>
+
+          <label class="field-label" for="pro-price-type">Type</label>
+          <select id="pro-price-type">
+            <option value="Fixed">Fixed</option>
+            <option value="Hourly">Hourly</option>
+          </select>
+
+          <label class="field-label" for="pro-price-amount">Amount (PHP)</label>
+          <input id="pro-price-amount" type="number" min="0" inputmode="numeric" placeholder="e.g. 500" />
+
+          <label class="field-label" for="pro-radius">Service Radius (km)</label>
+          <input id="pro-radius" type="number" min="1" inputmode="numeric" placeholder="e.g. 10" />
+
+          <p class="muted tiny">You can update pricing and radius later in your dashboard.</p>
+        </div>
+      </div>
+
+      <!-- Step 2: Services -->
+      <div class="wizard-step hidden" data-step="2">
+        <div class="card soft">
+          <h3>Services You Offer</h3>
+
+          <label class="field-label" for="provider-category">Category</label>
+          <select id="provider-category"></select>
+
+          <label class="field-label" for="provider-service">Service</label>
+          <select id="provider-service"></select>
+
+          <button class="secondary-btn" data-action="addProviderService" type="button">+ Add this Service</button>
+
+          <div id="provider-services-list" class="chips-wrap"></div>
+
+          <p class="muted tiny">Add at least 1 service to proceed.</p>
+        </div>
+      </div>
+
+      <!-- Step 3: Review & Confirm (verify details BEFORE account) -->
+      <div class="wizard-step hidden" data-step="3">
+        <div class="card soft">
+          <h3>Review & Confirm</h3>
+          <p class="muted tiny">Double-check everything. You can go back to edit.</p>
+
+          <div id="pro-review" class="review-box"></div>
+
+          <label class="confirm-row">
+            <input id="pro-confirm" type="checkbox" />
+            I confirm that the details above are correct.
+          </label>
+        </div>
+      </div>
+
+      <!-- Step 4: Account (LAST STEP) -->
+      <div class="wizard-step hidden" data-step="4">
+        <div class="card soft">
+          <h3>Account (Final)</h3>
+
+          <label class="field-label" for="pro-signup-email">Email</label>
+          <input id="pro-signup-email" type="email" placeholder="pro@email.com" />
+
+          <label class="field-label" for="pro-signup-password">Password</label>
+          <input id="pro-signup-password" type="password" placeholder="Create password" />
+
+          <label class="field-label" for="pro-signup-password2">Confirm Password</label>
+          <input id="pro-signup-password2" type="password" placeholder="Confirm password" />
+
+          <p class="muted tiny">Already a provider?</p>
+          <button class="secondary-btn" data-page="provider-login" type="button">Go to Provider Sign In</button>
+        </div>
+      </div>
+
+      <!-- Wizard controls -->
+      <div class="wizard-actions">
+        <button class="secondary-btn" type="button" id="pro-back-btn">Back</button>
+        <button class="primary-btn" type="button" id="pro-next-btn">Proceed</button>
+
+        <!-- Final submit only on LAST step -->
+        <button class="primary-btn hidden" type="button" id="pro-submit-btn" data-action="providerSignUp">
+          Confirm & Create Provider Account
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- PROVIDER SIGN IN -->
+    <section id="provider-login" class="page hidden">
+      <div class="container">
+        <div class="card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>Provider Sign In</h2>
+
+          <label class="field-label" for="pro-login-email">Email</label>
+          <input id="pro-login-email" type="email" placeholder="pro@email.com" />
+
+          <label class="field-label" for="pro-login-password">Password</label>
+            <input id="pro-login-password" type="password" placeholder="••••••••" />
+          
+
+          <button class="primary-btn" data-action="providerSignIn">Sign In</button>
+
+          <p class="muted tiny">New provider?</p>
+          <button class="secondary-btn" data-page="provider-signup">Register as Pro</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENT SEARCH -->
+    <section id="client-search" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>Find a Pro Near You</h2>
+
+          <div class="filters">
+            <label class="field-label" for="search-input">Keyword</label>
+            <input type="text" id="search-input" placeholder="e.g. plumber, cleaner" />
+
+            <label class="field-label" for="city-filter">City (optional)</label>
+            <input type="text" id="city-filter" placeholder="e.g. Manila" />
+
+            <button class="secondary-btn" type="button" id="toggle-advanced">
+              Advanced Filters ▾
+            </button>
+
+            <div id="advanced-filters" class="hidden">
+              <label class="field-label" for="client-category">Category</label>
+              <select id="client-category"></select>
+
+              <label class="field-label" for="client-service">Service</label>
+              <select id="client-service"></select>
+
+              <div class="divider"></div>
+              <h3 class="mini-title">Near Me</h3>
+
+              <button class="secondary-btn" type="button" data-action="setClientNearMe">
+                📍 Use My Location (Near Me)
+              </button>
+
+              <p class="muted tiny" id="near-status">No location set.</p>
+
+              <label class="field-label" for="near-radius">Show providers within (km)</label>
+              <input id="near-radius" type="number" min="1" inputmode="numeric" value="10" />
+
+              <input type="hidden" id="client-lat" />
+              <input type="hidden" id="client-lng" />
+            </div>
+
+           
+          </div>
+
+          <button class="primary-btn" data-action="searchService">Search Agad</button>
+        </div>
+
+        <div id="results-list" class="results-grid"></div>
+      </div>
+    </section>
+
+    <!-- BOOKING PAGE -->
+    <section id="booking-page" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-page="client-search">← Back to results</button>
+          <h2>Book a Provider</h2>
+          <p class="muted" id="booking-provider-line">Provider:</p>
+
+          <label class="field-label" for="booking-service">Service</label>
+          <select id="booking-service"></select>
+
+          <label class="field-label" for="booking-date">Preferred Date</label>
+          <input id="booking-date" type="date" />
+
+          <label class="field-label" for="booking-time">Preferred Time</label>
+          <input id="booking-time" type="text" placeholder="e.g. 1pm-3pm" />
+
+          <label class="field-label" for="booking-address">Address (optional)</label>
+          <input id="booking-address" type="text" placeholder="Street / Barangay / City" />
+
+          <label class="field-label">Pin Location</label>
+          <button class="secondary-btn" type="button" data-action="useMyLocation">📍 Use My Current Location</button>
+          <p class="muted tiny" id="location-status">No pinned location yet.</p>
+
+          <input type="hidden" id="booking-lat" />
+          <input type="hidden" id="booking-lng" />
+
+          <label class="field-label" for="booking-notes">Notes (optional)</label>
+          <textarea id="booking-notes" rows="4" placeholder="Describe the issue / request..."></textarea>
+
+          <label class="field-label" for="booking-photo">Photo (optional)</label>
+          <input id="booking-photo" type="file" accept="image/*" />
+
+          <button class="primary-btn" data-action="submitBooking">Send Booking Request</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENT DASHBOARD -->
+    <section id="client-dashboard" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+
+          <div class="dash-head">
+            <h2>Client Dashboard</h2>
+            <div class="dash-tabs">
+              <button class="tab-btn tab-active" id="clientTabBookings" data-tab="client:bookings">Bookings</button>
+              <button class="tab-btn" id="clientTabChat" data-tab="client:chat">Chat</button>
+            </div>
+          </div>
+
+          <div id="client-tab-bookings">
+            <p class="muted">Your booking history</p>
+            <div id="client-bookings" class="dashboard-list"></div>
+          </div>
+
+          <div id="client-tab-chat" class="hidden">
+            <p class="muted">Chat per booking</p>
+            <div class="two-col">
+              <div class="card soft">
+                <h3>Bookings</h3>
+                <div id="client-chat-booking-list" class="chat-list"></div>
+              </div>
+              <div class="card soft">
+                <h3>Chat</h3>
+                <div id="chat-thread" class="chat-thread"></div>
+                <div class="chat-input">
+                  <input id="chat-message" type="text" placeholder="Type a message..." />
+                  <button class="action-btn" data-action="sendChatMessage">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVIDER DASHBOARD -->
+    <section id="provider-dashboard" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+
+          <div class="dash-head">
+            <h2>Provider Dashboard</h2>
+            <div class="dash-tabs">
+              <button  class="tab-btn tab-active" id="tabBookings" data-tab="provider:bookings">Bookings</button>
+              <button class="tab-btn" id="tabProfile" data-tab="provider:profile">Profile</button>
+              <button  class="tab-btn" id="tabAvailability" data-tab="provider:availability">Availability</button>
+              <button  class="tab-btn" id="tabChat" data-tab="provider:chat">Chat</button>
+            </div>
+          </div>
+
+          <div id="provider-tab-bookings">
+            <p class="muted">Booking requests and job status</p>
+            <div id="provider-bookings" class="dashboard-list"></div>
+          </div>
+
+          <div id="provider-tab-profile" class="hidden">
+            <p class="muted">Edit your profile + request verification</p>
+
+            <div class="two-col">
+              <div class="card soft">
+                <h3>Profile</h3>
+                <label class="field-label" for="pro-edit-name">Name</label>
+                <input id="pro-edit-name" type="text" />
+
+                <div class="divider"></div>
+
+                <h3>Provider Location</h3>
+                <button class="secondary-btn" type="button" data-action="setProviderLocation">
+                  📍 Set My Location (GPS)
+                </button>
+                <p class="muted tiny" id="pro-location-status">No location set.</p>
+
+                <label class="field-label" for="pro-edit-city">City</label>
+                <input id="pro-edit-city" type="text" />
+
+                <div class="divider"></div>
+
+                <label class="field-label" for="pro-edit-date">Available Date</label>
+                <input id="pro-edit-date" type="date" />
+
+                <label class="field-label" for="pro-edit-time">Available Time</label>
+                <input id="pro-edit-time" type="text" />
+
+                <label class="field-label" for="pro-edit-phone">Phone</label>
+                <input id="pro-edit-phone" type="tel" inputmode="tel" />
+
+                <label class="field-label" for="pro-edit-messenger">Messenger link</label>
+                <input id="pro-edit-messenger" type="text" />
+
+                <div class="divider"></div>
+
+                <h3>Pricing</h3>
+                <label class="field-label" for="pro-edit-price-type">Type</label>
+                <select id="pro-edit-price-type">
+                  <option value="Fixed">Fixed</option>
+                  <option value="Hourly">Hourly</option>
+                </select>
+
+                <label class="field-label" for="pro-edit-price-amount">Amount (PHP)</label>
+                <input id="pro-edit-price-amount" type="number" min="0" inputmode="numeric" />
+
+                <label class="field-label" for="pro-edit-radius">Service Radius (km)</label>
+                <input id="pro-edit-radius" type="number" min="1" inputmode="numeric" />
+
+                <button class="primary-btn" data-action="providerSaveProfile">Save Profile</button>
+              </div>
+
+              <div class="card soft">
+                <h3>Services</h3>
+                <label class="field-label" for="pro-edit-category">Category</label>
+                <select id="pro-edit-category"></select>
+
+                <label class="field-label" for="pro-edit-service">Service</label>
+                <select id="pro-edit-service"></select>
+
+                <button class="secondary-btn" data-action="providerAddServiceFromProfile">+ Add Service</button>
+                <div id="pro-edit-services-list" class="chips-wrap"></div>
+
+                <div class="divider"></div>
+
+                <h3>Verification</h3>
+                <p class="muted tiny">Upload ID/selfie. Admin approves.</p>
+                <input id="verify-file" type="file" accept="image/*" />
+                <button class="secondary-btn" data-action="providerRequestVerification">Request Verification</button>
+                <p class="muted tiny" id="verify-status"></p>
+
+                <div class="divider"></div>
+
+                <h3>Change Password</h3>
+                <input id="pro-old-pass" type="password" placeholder="Old password" />
+                <input id="pro-new-pass" type="password" placeholder="New password" />
+                <input id="pro-new-pass2" type="password" placeholder="Confirm new password" />
+                <button class="primary-btn" data-action="providerChangePassword">Update Password</button>
+
+                <div class="divider"></div>
+                <h3>Plan</h3>
+                <p class="muted tiny" id="plan-status"></p>
+              </div>
+            </div>
+          </div>
+
+          <div id="provider-tab-availability" class="hidden">
+            <p class="muted">Block dates you are unavailable.</p>
+
+            <div class="card soft">
+              <label class="field-label" for="avail-date">Unavailable Date</label>
+              <input id="avail-date" type="date" />
+
+              <label class="field-label" for="avail-note">Note (optional)</label>
+              <input id="avail-note" type="text" placeholder="e.g. Out of town" />
+
+              <button class="primary-btn" data-action="providerAddUnavailable">Add Unavailable Date</button>
+            </div>
+
+            <div class="divider"></div>
+            <div id="avail-list" class="dashboard-list"></div>
+          </div>
+
+          <div id="provider-tab-chat" class="hidden">
+            <p class="muted">Chat per booking</p>
+            <div class="two-col">
+              <div class="card soft">
+                <h3>Bookings</h3>
+                <div id="provider-chat-booking-list" class="chat-list"></div>
+              </div>
+              <div class="card soft">
+                <h3>Chat</h3>
+                <div id="chat-thread-provider" class="chat-thread"></div>
+                <div class="chat-input">
+                  <input id="chat-message-provider" type="text" placeholder="Type a message..." />
+                  <button class="action-btn" data-action="sendChatMessageProvider">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVIDER PUBLIC PROFILE -->
+    <section id="provider-public" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <div id="public-profile-view"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS PAGE -->
+    <section id="reviews-page" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>Reviews</h2>
+          <p class="muted">Leave a review for a provider (profanity filtered; flagged reviews hidden).</p>
+
+          <div class="two-col">
+            <div class="card soft">
+              <h3>Write a Review</h3>
+
+              <label class="field-label" for="review-provider">Provider</label>
+              <select id="review-provider"></select>
+
+              <label class="field-label" for="review-rating">Rating</label>
+              <select id="review-rating">
+                <option value="5">★★★★★ (5)</option>
+                <option value="4">★★★★☆ (4)</option>
+                <option value="3">★★★☆☆ (3)</option>
+                <option value="2">★★☆☆☆ (2)</option>
+                <option value="1">★☆☆☆☆ (1)</option>
+              </select>
+
+              <label class="field-label" for="review-name">Your name (optional)</label>
+              <input type="text" id="review-name" placeholder="Anonymous" />
+
+              <label class="field-label" for="review-text">Review</label>
+              <textarea id="review-text" rows="4" placeholder="Write your experience..."></textarea>
+
+              <button class="primary-btn" data-action="submitReview">Submit Review</button>
+            </div>
+
+            <div class="card soft">
+              <h3>Recent Reviews</h3>
+              <div id="reviews-list" class="review-list"></div>
+              <button class="danger-link" data-action="resetReviews">Reset Reviews</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN PAGE (mock) -->
+    <section id="admin-page" class="page hidden">
+      <div class="container">
+        <div class="card wide-card">
+          <button class="back-link" data-action="home">← Back</button>
+          <h2>Admin Panel</h2>
+          <p class="muted">Approve verification, toggle featured, set subscription tiers.</p>
+
+          <div class="two-col">
+            <div class="card soft">
+              <h3>Verification Requests</h3>
+              <div id="admin-verify-list" class="dashboard-list"></div>
+            </div>
+
+            <div class="card soft">
+              <h3>Providers</h3>
+              <div id="admin-provider-list" class="dashboard-list"></div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="card soft">
+            <h3>Reports</h3>
+            <div id="admin-report-list" class="dashboard-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- REPORT / BLOCK MODAL -->
+  <div id="reportModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Report Provider">
+    <div class="modal-card">
+      <h3>Report / Block</h3>
+      <p class="muted" id="reportTargetLine">Target:</p>
+
+      <label class="field-label" for="reportReason">Reason</label>
+      <select id="reportReason">
+        <option value="Spam">Spam / Fake</option>
+        <option value="Harassment">Harassment</option>
+        <option value="Scam">Scam</option>
+        <option value="Bad Service">Bad Service</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label class="field-label" for="reportDetails">Details</label>
+      <textarea id="reportDetails" rows="4" placeholder="Describe what happened..."></textarea>
+
+      <div class="action-row">
+        <button class="action-btn" data-action="submitReport">Submit Report</button>
+        <button class="action-btn" data-action="blockTarget">Block</button>
+        <button class="action-btn" data-action="closeReportModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script
+  
+  window.__GMAPS_KEY = "AIzaSyAPNg7SwKas2kSHTev25t40CQ2-f_SI6vg";
+  type="module" src="js/app.js"></script>
+</body>
+</html>
