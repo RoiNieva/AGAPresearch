@@ -1,3 +1,4 @@
+// js/auth.js
 import { val, byId } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray, setSession } from "./storage.js";
@@ -7,8 +8,17 @@ import { showPage, goHome } from "./routing.js";
 
 async function hashPassword(password) {
   let h = 5381;
-  for (let i=0; i<password.length; i++) h = ((h << 5) + h) + password.charCodeAt(i);
+  for (let i = 0; i < password.length; i++) h = ((h << 5) + h) + password.charCodeAt(i);
   return "h_" + (h >>> 0).toString(16);
+}
+
+function redirectAfterAuthOrHome() {
+  const target = window.__redirectAfterAuth;
+  if (target) {
+    window.__redirectAfterAuth = null;
+    return showPage(target);
+  }
+  goHome();
 }
 
 export async function clientSignUp() {
@@ -24,9 +34,10 @@ export async function clientSignUp() {
   state.clients.push(client);
   saveArray(K.clients, state.clients);
 
-  setSession({ role:"client", id: client.id });
+  setSession({ role: "client", id: client.id });
   updateNav(); updateBell();
-  goHome();
+
+  redirectAfterAuthOrHome();
 }
 
 export async function clientSignIn() {
@@ -35,18 +46,19 @@ export async function clientSignIn() {
   if (!email || !pass) return alert("Enter email and password.");
 
   if (email === "admin@agap.com" && pass === "admin123") {
-    setSession({ role:"admin", id:"admin" });
+    setSession({ role: "admin", id: "admin" });
     updateNav(); updateBell();
     return showPage("admin-page");
   }
 
   const c = state.clients.find(x => x.email === email);
   if (!c) return alert("Account not found.");
-
   if ((await hashPassword(pass)) !== c.passHash) return alert("Wrong password.");
-  setSession({ role:"client", id: c.id });
+
+  setSession({ role: "client", id: c.id });
   updateNav(); updateBell();
-  goHome();
+
+  redirectAfterAuthOrHome();
 }
 
 export async function providerSignUp() {
@@ -65,7 +77,6 @@ export async function providerSignUp() {
   if (!state.providerSelectedServices.length) return alert("Add at least 1 service.");
   if (!byId("pro-confirm")?.checked) return alert("Please confirm your details first.");
 
-
   const provider = {
     id: makeId(),
     email,
@@ -76,13 +87,14 @@ export async function providerSignUp() {
     pricing: { type: byId("pro-price-type").value, amount: Number(byId("pro-price-amount").value || 0), currency: "PHP" },
     verified: false,
     featured: false,
-    subscription: { plan:"Free", active:true },
+    subscription: { plan: "Free", active: true },
     createdAt: Date.now()
   };
 
   state.providers.push(provider);
   saveArray(K.providers, state.providers);
-  setSession({ role:"provider", id: provider.id });
+
+  setSession({ role: "provider", id: provider.id });
   updateNav(); updateBell();
   showPage("provider-dashboard");
 }
@@ -96,7 +108,7 @@ export async function providerSignIn() {
   if (!p) return alert("Provider not found.");
   if ((await hashPassword(pass)) !== p.passHash) return alert("Wrong password.");
 
-  setSession({ role:"provider", id: p.id });
+  setSession({ role: "provider", id: p.id });
   updateNav(); updateBell();
   showPage("provider-dashboard");
 }
