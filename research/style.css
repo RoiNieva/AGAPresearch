@@ -1094,6 +1094,10 @@ body.dark .pill { background: rgba(255,255,255,.05); }
   .wizard-head { flex-direction:column; }
   .wizard-progress { width:100%; min-width: unset; }
 }
+
+/* Notifications modal list cards */
+#notifModal .modal-card { max-height: 80vh; overflow:auto; }
+
 /* Trust signals (verified + rating) */
 .result-top{
   display:flex;
@@ -1210,4 +1214,5 @@ body.dark .pill { background: rgba(255,255,255,.05); }
 .trust-badge.rating{
   border-color: rgba(167,139,250,.25);
 }
+#booking-guest-notice { margin: 10px 0; }
 
