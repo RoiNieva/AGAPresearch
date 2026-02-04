@@ -1,3 +1,4 @@
+// js/storage.js
 export const K = {
   providers: "agap_providers_v3",
   clients: "agap_clients_v3",
@@ -9,7 +10,10 @@ export const K = {
   availability: "agap_availability_v1",
   chats: "agap_chats_v1",
   verifyRequests: "agap_verify_requests_v1",
-  theme: "agap_theme_v1"
+  theme: "agap_theme_v1",
+
+  // ✅ NEW
+  notifications: "agap_notifications_v1"
 };
 
 export function loadArray(key) {

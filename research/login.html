@@ -58,13 +58,129 @@
       <div class="hero-content">
         <h1>AGAP Services</h1>
         <p>Find reliable pros near you in seconds.</p>
-
         <div class="main-buttons">
-          <button class="main-btn" data-page="provider-signup">Offer Services</button>
-          <button class="main-btn" data-page="client-search">Find Services</button>
+          <button class="main-btn" data-page="auth-signin">Sign In</button>
+          <button class="main-btn" data-page="auth-signup">Sign Up</button>
         </div>
       </div>
     </section>
+
+<!-- UNIFIED SIGN IN -->
+<section id="auth-signin" class="page hidden">
+  <div class="container">
+    <div class="card wide-card">
+      <button class="back-link" data-action="home">← Back</button>
+
+      <h2>Sign In</h2>
+      <p class="muted tiny">Enter your email and password, then choose your role.</p>
+
+      <div class="card soft">
+        <label class="field-label" for="auth-login-email">Email</label>
+        <input id="auth-login-email" type="email" placeholder="you@email.com" />
+
+        <label class="field-label" for="auth-login-password">Password</label>
+        <input id="auth-login-password" type="password" placeholder="••••••••" />
+
+        <div class="divider"></div>
+
+        <p class="muted tiny" style="margin-bottom:8px;">Sign in as:</p>
+        <div class="two-col" style="gap:10px;">
+          <label class="card soft" style="cursor:pointer;">
+            <input type="radio" name="auth-login-role" value="client" checked />
+            <b>Client</b>
+            <div class="muted tiny">Book services</div>
+          </label>
+
+          <label class="card soft" style="cursor:pointer;">
+            <input type="radio" name="auth-login-role" value="provider" />
+            <b>Provider</b>
+            <div class="muted tiny">Offer services</div>
+          </label>
+        </div>
+
+        <div style="margin-top:12px;">
+          <button class="primary-btn" data-action="unifiedSignIn">Sign In</button>
+        </div>
+
+        <p class="muted tiny" style="margin-top:10px;">
+          No account yet?
+          <button class="secondary-btn" type="button" data-page="auth-signup">Go to Sign Up</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- UNIFIED SIGN UP -->
+<section id="auth-signup" class="page hidden">
+  <div class="container">
+    <div class="card wide-card">
+      <button class="back-link" data-action="home">← Back</button>
+
+      <h2>Sign Up</h2>
+      <p class="muted tiny">Choose your role first, then continue.</p>
+
+      <div class="card soft">
+        <p class="muted tiny" style="margin-bottom:8px;">I am signing up as:</p>
+
+        <div class="two-col" style="gap:10px;">
+          <label class="card soft" style="cursor:pointer;">
+            <input type="radio" name="auth-signup-role" value="client" checked />
+            <b>Client</b>
+            <div class="muted tiny">Find and book services</div>
+          </label>
+
+          <label class="card soft" style="cursor:pointer;">
+            <input type="radio" name="auth-signup-role" value="provider" />
+            <b>Provider</b>
+            <div class="muted tiny">Offer services to clients</div>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Client signup form (shown when role=client) -->
+        <div id="auth-signup-client">
+          <h3 style="margin-top:0;">Client Details</h3>
+
+          <label class="field-label" for="auth-signup-name">Full Name</label>
+          <input id="auth-signup-name" type="text" placeholder="Your Name" />
+
+          <label class="field-label" for="auth-signup-email">Email</label>
+          <input id="auth-signup-email" type="email" placeholder="you@email.com" />
+
+          <label class="field-label" for="auth-signup-password">Password</label>
+          <input id="auth-signup-password" type="password" placeholder="Create password" />
+
+          <label class="field-label" for="auth-signup-password2">Confirm Password</label>
+          <input id="auth-signup-password2" type="password" placeholder="Confirm password" />
+
+          <button class="primary-btn" data-action="unifiedClientSignUp" style="margin-top:10px;">
+            Create Client Account
+          </button>
+        </div>
+
+        <!-- Provider signup entry (shown when role=provider) -->
+        <div id="auth-signup-provider" class="hidden">
+          <h3 style="margin-top:0;">Provider Registration</h3>
+          <p class="muted tiny">
+            Provider signup requires extra details (services, pricing, availability).
+            Continue to the Provider Signup wizard.
+          </p>
+
+          <button class="primary-btn" type="button" data-action="startProviderSignup">
+            Continue Provider Sign Up
+          </button>
+        </div>
+
+        <p class="muted tiny" style="margin-top:10px;">
+          Already have an account?
+          <button class="secondary-btn" type="button" data-page="auth-signin">Go to Sign In</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- AGAP SECTION -->
     <section id="agap-section" class="agap-section">

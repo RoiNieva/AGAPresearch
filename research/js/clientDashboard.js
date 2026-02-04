@@ -5,11 +5,11 @@ import { K, saveArray, getSession } from "./storage.js";
 import { escapeHTML, formatDate } from "./utils.js";
 import { updateBell } from "./nav.js";
 import { renderClientChatBookingList, renderChatThreadClient } from "./chat.js";
+import { addNotification } from "./notifications.js";
 
 let activeClientTab = "bookings";
 
 function ensureGlobalHooks() {
-  // chat.js uses window.clientSetTab?.("chat")
   window.clientSetTab = clientSetTab;
 }
 
@@ -77,33 +77,17 @@ export function renderClientDashboard() {
   wrap.innerHTML = my.map(b => {
     const status = b.status || "Pending";
 
-    // Actions are now data-attributes (NO inline onclick)
     let actions = "";
 
     if (status === "Pending") {
-      actions += `
-        <button class="action-btn"
-          type="button"
-          data-client-booking-action="cancel"
-          data-booking-id="${escapeHTML(b.id)}">Cancel</button>
-      `;
+      actions += `<button class="action-btn" type="button" data-client-booking-action="cancel" data-booking-id="${escapeHTML(b.id)}">Cancel</button>`;
     }
 
     if (status === "Completed") {
-      actions += `
-        <button class="action-btn"
-          type="button"
-          data-client-booking-action="confirm"
-          data-booking-id="${escapeHTML(b.id)}">Confirm Completed</button>
-      `;
+      actions += `<button class="action-btn" type="button" data-client-booking-action="confirm" data-booking-id="${escapeHTML(b.id)}">Confirm Completed</button>`;
     }
 
-    // Chat button uses your system-wide event handler (events.js)
-    actions += `
-      <button class="action-btn"
-        type="button"
-        data-chat-open="client:${escapeHTML(b.id)}">Chat</button>
-    `;
+    actions += `<button class="action-btn" type="button" data-chat-open="client:${escapeHTML(b.id)}">Chat</button>`;
 
     return `
       <div class="card soft">
@@ -116,7 +100,6 @@ export function renderClientDashboard() {
     `;
   }).join("");
 
-  // keep current tab consistent if user navigates back
   if (activeClientTab === "chat") clientSetTab("chat");
 }
 
@@ -144,12 +127,17 @@ function clientConfirmCompleted(bookingId) {
   saveArray(K.bookings, state.bookings);
   updateBell();
   renderClientDashboard();
+
+  // ✅ notify provider
+  addNotification({
+    toRole: "provider",
+    toId: b.providerId,
+    title: "Booking closed",
+    message: `Client confirmed completion ✅ (${b.service} on ${b.date})`,
+    linkPage: "provider-dashboard"
+  });
 }
 
-/**
- * Delegated actions for the dashboard
- * (so you don't need to add more cases in events.js)
- */
 function installClientDashboardDelegation() {
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-client-booking-action]");

@@ -114,7 +114,6 @@ function createProviderCard(p) {
   // ⭐ rating text from reviews
   const ratingText = providerAvgText(p.id);
 
-  // small service preview
   const servicesPreview = (p.services || [])
     .map(s => `${s.category} - ${s.service}`)
     .slice(0, 3)
@@ -125,7 +124,9 @@ function createProviderCard(p) {
       <h3 class="result-name">${escapeHTML(prof.name || "Provider")}</h3>
 
       <div class="trust-row">
-        ${isVerified ? `<span class="trust-badge verified">✅ Verified</span>` : `<span class="trust-badge unverified">Not verified</span>`}
+        ${isVerified
+          ? `<span class="trust-badge verified">✅ Verified</span>`
+          : `<span class="trust-badge unverified">Not verified</span>`}
         <span class="trust-badge rating">⭐ ${escapeHTML(ratingText)}</span>
       </div>
     </div>
@@ -136,7 +137,9 @@ function createProviderCard(p) {
       • ⏰ ${escapeHTML(prof.time || "")}
     </p>
 
-    ${servicesPreview.length ? `<p class="muted tiny">Services: ${servicesPreview.join(", ")}${(p.services || []).length > 3 ? "..." : ""}</p>` : ""}
+    ${servicesPreview.length
+      ? `<p class="muted tiny">Services: ${servicesPreview.join(", ")}${(p.services || []).length > 3 ? "..." : ""}</p>`
+      : ""}
 
     <div class="actions">
       <button class="primary-btn" data-book-provider="${escapeHTML(p.id)}">Book this Pro</button>
@@ -145,8 +148,42 @@ function createProviderCard(p) {
       </div>
     </div>
   `;
-
   return card;
+}
+
+/* ---------------------------
+   No-result explanations
+---------------------------- */
+function buildNoResultsCard(stats) {
+  const tips = [];
+
+  if (stats.totalProviders === 0) {
+    tips.push("No providers are registered yet.");
+  } else {
+    if (stats.blockedCount > 0) tips.push(`${stats.blockedCount} provider(s) are blocked by you.`);
+
+    if (stats.useNearMe) {
+      if (stats.noGpsCount > 0) tips.push(`${stats.noGpsCount} provider(s) have no GPS location set (ask them to enable GPS in Profile).`);
+      if (stats.outsideRadiusCount > 0) tips.push(`${stats.outsideRadiusCount} provider(s) are outside your radius.`);
+      tips.push("Try increasing the radius or turn off Near Me.");
+    }
+
+    if (stats.cityFilteredCount > 0) tips.push(`${stats.cityFilteredCount} provider(s) were filtered by city. Try clearing the city filter.`);
+    if (stats.serviceFilteredCount > 0) tips.push("No provider matched your category/service/keyword filters. Try clearing filters or using a broader keyword.");
+
+    // helpful generic fallback
+    if (tips.length === 0) tips.push("Try removing filters or searching a different keyword.");
+  }
+
+  return `
+    <div class="card soft">
+      <h3>No matching providers found</h3>
+      <p class="muted tiny">Here’s why it might be happening:</p>
+      <ul class="muted tiny" style="margin-top:8px; padding-left:18px;">
+        ${tips.map(t => `<li>${escapeHTML(t)}</li>`).join("")}
+      </ul>
+    </div>
+  `;
 }
 
 /* ---------------------------
@@ -179,10 +216,70 @@ export function searchService() {
     nearRadius
   };
 
-  const matches = state.providers.filter(p => providerMatchesFilters(p, filters));
+  // stats for explanations
+  const stats = {
+    totalProviders: (state.providers || []).length,
+    blockedCount: 0,
+    useNearMe,
+    noGpsCount: 0,
+    outsideRadiusCount: 0,
+    cityFilteredCount: 0,
+    serviceFilteredCount: 0
+  };
+
+  const matches = (state.providers || []).filter(p => {
+    if (!p) return false;
+
+    if (isBlocked(p.id)) {
+      stats.blockedCount++;
+      return false;
+    }
+
+    const prof = p.profile || {};
+    const providerServices = Array.isArray(p.services) ? p.services : [];
+
+    // city filter
+    const cityOk = !filters.city || String(prof.city || "").toLowerCase().includes(filters.city);
+    if (!cityOk) {
+      stats.cityFilteredCount++;
+      return false;
+    }
+
+    // near-me filter
+    if (filters.useNearMe) {
+      if (!p.location?.lat || !p.location?.lng) {
+        stats.noGpsCount++;
+        return false;
+      }
+      const d = haversineKm(filters.clientLat, filters.clientLng, p.location.lat, p.location.lng);
+      if (d > filters.nearRadius) {
+        stats.outsideRadiusCount++;
+        return false;
+      }
+    }
+
+    // service filters
+    const ok = providerServices.some(s => {
+      const sCat = String(s?.category || "");
+      const sSvc = String(s?.service || "");
+      const catOk = !filters.category || sCat === filters.category;
+      const svcOk = !filters.service || sSvc === filters.service;
+
+      const keyOk =
+        !filters.keyword ||
+        String(prof.name || "").toLowerCase().includes(filters.keyword) ||
+        sCat.toLowerCase().includes(filters.keyword) ||
+        sSvc.toLowerCase().includes(filters.keyword);
+
+      return catOk && svcOk && keyOk;
+    });
+
+    if (!ok) stats.serviceFilteredCount++;
+    return ok;
+  });
 
   if (!matches.length) {
-    out.innerHTML = `<p class="muted">No matching providers found.</p>`;
+    out.innerHTML = buildNoResultsCard(stats);
     return;
   }
 

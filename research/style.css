@@ -615,10 +615,50 @@ textarea{ resize:vertical; }
 .tiny{ font-size:.88rem; }
 .mini-title{ margin:0 0 8px; font-weight:900; }
 
-.two-col{ display:grid; grid-template-columns:1fr; gap:12px; }
-@media(min-width:900px){ .two-col{ grid-template-columns:1fr 1fr; } }
+.two-col{ 
+  display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; 
+
+}
+
+@media(min-width:940px){ .two-col{ grid-template-columns: 1fr; } }
 
 .list{ margin:0; padding-left:18px; }
+
+.auth-role {
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Remove native radio appearance */
+.auth-role input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: absolute;
+  opacity: 0;
+}
+
+/* Card base */
+.auth-role {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+/* Selected state */
+.auth-role:has(input:checked) {
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(34,211,238,0.06),
+    transparent
+  );
+}
+
+
+
 
 .results-grid{
   display:flex; flex-direction:column; align-items:center;

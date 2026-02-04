@@ -1,3 +1,4 @@
+// js/state.js
 import { K, loadArray } from "./storage.js";
 
 export const SERVICE_CATALOG = {
@@ -33,6 +34,9 @@ export const state = {
   availability: loadArray(K.availability),
   chats: loadArray(K.chats),
   verifyRequests: loadArray(K.verifyRequests),
+
+  // ✅ NEW
+  notifications: loadArray(K.notifications),
 
   providerSelectedServices: [],
   bookingDraft: { providerId: null },

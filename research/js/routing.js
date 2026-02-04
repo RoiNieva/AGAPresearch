@@ -100,6 +100,7 @@ function navigate(pageId, { push = true } = {}) {
 
   showOnly(pageId);
 
+  // lazy map load AFTER visible
   if (pageId === "map-page") {
     requestAnimationFrame(() => {
       import("./map.js")
@@ -112,24 +113,26 @@ function navigate(pageId, { push = true } = {}) {
   if (push) pushHistory(pageId);
 }
 
-/* ---------------------------
-   Public API
----------------------------- */
+/* 
+   Public  API
+ */
 export function showPage(pageId) {
   const sess = getSession();
-  const needClient = ["booking-page", "client-dashboard"].includes(pageId);
+
+  // ✅ CHANGE: booking-page is now allowed for guests (preview mode)
+  const needClient = ["client-dashboard"].includes(pageId);
   const needProvider = ["provider-dashboard"].includes(pageId);
   const needAdmin = ["admin-page"].includes(pageId);
 
   if (needClient && (!sess || sess.role !== "client")) {
     window.__redirectAfterAuth = pageId;
-    navigate("client-auth");
+    navigate("auth-signin");
     return;
   }
 
   if (needProvider && (!sess || sess.role !== "provider")) {
     window.__redirectAfterAuth = pageId;
-    navigate("provider-login");
+    navigate("auth-signin");
     return;
   }
 
@@ -146,9 +149,9 @@ export function goHome() {
   navigate("home");
 }
 
-/* ---------------------------
-   Router hooks (fixes nav.js notifications)
----------------------------- */
+/* 
+   Router hooks (for other modules)
+ */
 window.__routerShowPage = showPage;
 window.__routerGoHome = goHome;
 window.__routerGoBack = goBack;

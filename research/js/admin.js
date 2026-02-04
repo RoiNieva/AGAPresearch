@@ -4,6 +4,7 @@ import { state } from "./state.js";
 import { K, saveArray } from "./storage.js";
 import { escapeHTML } from "./utils.js";
 import { updateBell } from "./nav.js";
+import { addNotification } from "./notifications.js";
 
 export function renderAdmin() {
   renderAdminVerifyList();
@@ -12,9 +13,6 @@ export function renderAdmin() {
   updateBell();
 }
 
-/* ---------------------------
-   Verification Requests
----------------------------- */
 function renderAdminVerifyList() {
   const wrap = byId("admin-verify-list");
   if (!wrap) return;
@@ -33,7 +31,6 @@ function renderAdminVerifyList() {
     const div = document.createElement("div");
     div.className = "card soft";
 
-    // ✅ support both possible field names
     const img = v.fileDataUrl || v.image || "";
 
     div.innerHTML = `
@@ -58,19 +55,26 @@ export function adminSetVerify(reqId, status) {
   req.status = status;
   saveArray(K.verifyRequests, state.verifyRequests);
 
-  // mark provider verified if approved
   const p = state.providers.find(x => x.id === req.providerId);
   if (p) {
     p.verified = (status === "Approved");
     saveArray(K.providers, state.providers);
   }
 
+  // ✅ Notify provider
+  addNotification({
+    toRole: "provider",
+    toId: req.providerId,
+    title: "Verification update",
+    message: status === "Approved"
+      ? "Your verification was approved ✅"
+      : "Your verification was rejected ❌ (please re-submit)",
+    linkPage: "provider-dashboard"
+  });
+
   renderAdmin();
 }
 
-/* ---------------------------
-   Providers (feature / plan)
----------------------------- */
 function renderAdminProviderList() {
   const wrap = byId("admin-provider-list");
   if (!wrap) return;
@@ -131,9 +135,6 @@ export function adminSetPlan(providerId, plan) {
   renderAdminProviderList();
 }
 
-/* ---------------------------
-   Reports
----------------------------- */
 function renderAdminReports() {
   const wrap = byId("admin-report-list");
   if (!wrap) return;
@@ -161,36 +162,27 @@ function renderAdminReports() {
     });
 }
 
-/* ---------------------------
-   Delegated admin actions
----------------------------- */
 function installAdminDelegation() {
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-admin-verify],[data-admin-feature],[data-admin-plan]");
     if (!el) return;
 
-    // Verify approve/reject
     if (el.dataset.adminVerify) {
       e.preventDefault();
       e.stopPropagation();
-      const id = el.dataset.adminVerify;
-      const status = el.dataset.adminStatus || "Pending";
-      return adminSetVerify(id, status);
+      return adminSetVerify(el.dataset.adminVerify, el.dataset.adminStatus || "Pending");
     }
 
-    // Feature toggle
     if (el.dataset.adminFeature) {
       e.preventDefault();
       e.stopPropagation();
       return adminToggleFeatured(el.dataset.adminFeature);
     }
 
-    // Plan set
     if (el.dataset.adminPlan) {
       e.preventDefault();
       e.stopPropagation();
-      const plan = el.dataset.plan || "Free";
-      return adminSetPlan(el.dataset.adminPlan, plan);
+      return adminSetPlan(el.dataset.adminPlan, el.dataset.plan || "Free");
     }
   }, true);
 }

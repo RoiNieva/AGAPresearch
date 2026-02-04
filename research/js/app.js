@@ -11,17 +11,36 @@ import { initProviderServicePickers, installProviderServicesDelegation } from ".
 
 import { initPageLoadMotion, initScrollRevealMotion } from "./motion.js";
 
+function initUnifiedSignupRoleToggle(){
+  const clientBox = document.getElementById("auth-signup-client");
+  const providerBox = document.getElementById("auth-signup-provider");
+  if (!clientBox || !providerBox) return;
+
+  const update = () => {
+    const role = document.querySelector('input[name="auth-signup-role"]:checked')?.value || "client";
+    clientBox.classList.toggle("hidden", role !== "client");
+    providerBox.classList.toggle("hidden", role !== "provider");
+  };
+
+  document.querySelectorAll('input[name="auth-signup-role"]').forEach(r => {
+    r.addEventListener("change", update);
+  });
+
+  update();
+}
+
+
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   applyTheme();
   setupMobileNav();
   setupAccessibleLogo();
-
+  initUnifiedSignupRoleToggle();
   initAdvancedFiltersToggle();
   initClientSearchFilters();
-
   initPageLoadMotion();
   initScrollRevealMotion(document);
-
   bindAllEvents();
 
   // Provider signup UI
