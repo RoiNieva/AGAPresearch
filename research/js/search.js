@@ -278,10 +278,22 @@ export function searchService() {
     return ok;
   });
 
-  if (!matches.length) {
-    out.innerHTML = buildNoResultsCard(stats);
-    return;
-  }
+ if (!matches.length) {
+  out.innerHTML = `
+    <div class="card soft">
+      <h3>No matching providers found</h3>
+      <p class="muted">Try any of these:</p>
+      <ul class="muted" style="margin:8px 0 0 18px;">
+        <li>Remove the keyword and search again</li>
+        <li>Set City to blank</li>
+        <li>Use “All categories / All services”</li>
+        <li>If using Near Me, increase the radius (km)</li>
+      </ul>
+    </div>
+  `;
+  return;
+}
+
 
   matches.forEach(p => out.appendChild(createProviderCard(p)));
   applyStagger?.(out, 60);

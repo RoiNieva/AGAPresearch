@@ -8,7 +8,7 @@ import { bindAllEvents } from "./events.js";
 
 import { initProviderSignupWizard } from "./providerSignupWizard.js";
 import { initProviderServicePickers, installProviderServicesDelegation } from "./providerServices.js";
-
+import { initAuthUnifiedUI } from "./authUnified.js";
 import { initPageLoadMotion, initScrollRevealMotion } from "./motion.js";
 
 function initUnifiedSignupRoleToggle(){
@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initPageLoadMotion();
   initScrollRevealMotion(document);
   bindAllEvents();
+  initAuthUnifiedUI();
 
   // Provider signup UI
   initProviderSignupWizard();

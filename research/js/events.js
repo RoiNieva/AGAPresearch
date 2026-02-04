@@ -10,8 +10,14 @@ import {
   providerChangePassword,
   providerAddUnavailable
 } from "./providerDashboard.js";
+import {
+  authUnifiedSignIn,
+  authUnifiedClientSignUp,
+  authUnifiedStartProviderSignup
+} from "./authUnified.js";
+
 import { clientSetTab } from "./clientDashboard.js";
-import { clientSignIn, clientSignUp, providerSignIn, unifiedSignIn, unifiedClientSignUp } from "./auth.js";
+import { clientSignIn, clientSignUp, providerSignIn, unifiedSignIn, unifiedClientSignUp,logout } from "./auth.js";
 import { addProviderService } from "./providerServices.js";
 import { setClientNearMe, useMyLocation, setProviderLocation } from "./geo.js";
 import { searchService, selectCategory, openReportModal, submitReport, blockTarget, closeReportModal } from "./search.js";
@@ -57,6 +63,9 @@ export function bindAllEvents() {
       case "unifiedSignIn": return unifiedSignIn();
       case "unifiedClientSignUp": return unifiedClientSignUp();
       case "startProviderSignup": return showPage("provider-signup");
+      case "authUnifiedSignIn": return authUnifiedSignIn();
+      case "authUnifiedClientSignUp": return authUnifiedClientSignUp();
+      case "authUnifiedStartProviderSignup": return authUnifiedStartProviderSignup();
 
       // Provider signup service add
       case "addProviderService": return addProviderService();
