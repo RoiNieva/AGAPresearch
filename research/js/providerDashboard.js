@@ -41,6 +41,13 @@ function parseTimeToMinutes(t) {
   if (!t) return null;
   const s = String(t).trim().toLowerCase();
 
+  // allow simple hour like "8"
+  const mHourOnly = s.match(/^(\d{1,2})$/);
+  if (mHourOnly) {
+    const hh = Number(mHourOnly[1]);
+    if (hh >= 0 && hh <= 23) return hh * 60;
+  }
+
   const m24 = s.match(/^(\d{1,2}):(\d{2})$/);
   if (m24) {
     const hh = Number(m24[1]);
@@ -224,28 +231,52 @@ function getMyBooking(bookingId) {
   return b;
 }
 
-function providerHasConflict(me, bookingToAccept) {
-  const blocked = state.availability.some(a => a.providerId === me.id && a.date === bookingToAccept.date);
-  if (blocked) return true;
+function isUnavailable(providerId, date) {
+  return state.availability.some(a => a.providerId === providerId && a.date === date);
+}
 
-  const activeStatuses = new Set(["Accepted", "Ongoing", "Completed"]);
+function providerHasConflict(me, bookingToAccept) {
+  if (!me || !bookingToAccept) return true;
+
+  if (isUnavailable(me.id, bookingToAccept.date)) return true;
+
+  const blockingStatuses = new Set(["Accepted", "Ongoing"]);
+
   const others = state.bookings.filter(b =>
     b.providerId === me.id &&
     b.id !== bookingToAccept.id &&
     b.date === bookingToAccept.date &&
-    activeStatuses.has(b.status)
+    blockingStatuses.has(b.status)
   );
 
   if (!others.length) return false;
 
   const reqRange = parseTimeRange(bookingToAccept.time);
-  if (!reqRange) return true;
+  const reqPoint = parseTimeToMinutes(String(bookingToAccept.time || "").trim());
 
-  return others.some(b => {
-    const br = parseTimeRange(b.time);
-    if (!br) return true;
-    return overlaps(reqRange, br);
-  });
+  if (reqRange) {
+    return others.some(b => {
+      const br = parseTimeRange(b.time);
+      if (br) return overlaps(reqRange, br);
+
+      const bp = parseTimeToMinutes(String(b.time || "").trim());
+      if (bp == null) return false;
+      return (reqRange.start <= bp && bp < reqRange.end);
+    });
+  }
+
+  if (reqPoint != null) {
+    return others.some(b => {
+      const br = parseTimeRange(b.time);
+      if (br) return (br.start <= reqPoint && reqPoint < br.end);
+
+      const bp = parseTimeToMinutes(String(b.time || "").trim());
+      if (bp == null) return false;
+      return bp === reqPoint;
+    });
+  }
+
+  return false;
 }
 
 function setBookingStatus(bookingId, nextStatus) {
@@ -257,10 +288,12 @@ function setBookingStatus(bookingId, nextStatus) {
 
   const allowed = {
     Pending: ["Accepted", "Declined"],
-    Accepted: ["Ongoing", "Declined"],
-    Ongoing: ["Completed"],
+    Accepted: ["Ongoing", "Cancelled"],
+    Ongoing: ["Completed", "Cancelled"],
     Completed: [],
-    Closed: []
+    Closed: [],
+    Declined: [],
+    Cancelled: []
   };
 
   if (!(allowed[current] || []).includes(nextStatus)) {
@@ -278,17 +311,20 @@ function setBookingStatus(bookingId, nextStatus) {
 
   if (nextStatus === "Accepted") b.acceptedAt = Date.now();
   if (nextStatus === "Declined") b.declinedAt = Date.now();
+  if (nextStatus === "Cancelled") b.cancelledAt = Date.now();
   if (nextStatus === "Ongoing") b.startedAt = Date.now();
   if (nextStatus === "Completed") b.completedAt = Date.now();
 
   saveArray(K.bookings, state.bookings);
   updateBell();
+  renderProviderDashboard();
 
   // ✅ Notify client about booking status changes
   if (b.clientId) {
     const msgMap = {
       Accepted: `Your booking was accepted ✅ (${b.service} on ${b.date} ${b.time})`,
       Declined: `Your booking was declined ❌ (${b.service} on ${b.date} ${b.time})`,
+      Cancelled: `Your booking was cancelled ❌ (${b.service} on ${b.date} ${b.time})`,
       Ongoing: `Your booking is now ongoing 🛠 (${b.service})`,
       Completed: `Your booking was marked completed ✅ Please confirm to close.`
     };
@@ -303,10 +339,11 @@ function setBookingStatus(bookingId, nextStatus) {
       });
     }
   }
-
-  renderProviderDashboard();
 }
 
+/* ---------------------------
+  Dashboard render
+---------------------------- */
 export function renderProviderDashboard() {
   ensureGlobalHooks();
   renderProviderStats();
@@ -350,11 +387,14 @@ export function renderProviderDashboard() {
       if (status === "Accepted") {
         return `
           <button class="action-btn" type="button" data-provider-booking-action="Ongoing" data-booking-id="${escapeHTML(b.id)}">Start Job</button>
-          <button class="action-btn" type="button" data-provider-booking-action="Declined" data-booking-id="${escapeHTML(b.id)}">Cancel</button>
+          <button class="action-btn" type="button" data-provider-booking-action="Cancelled" data-booking-id="${escapeHTML(b.id)}">Cancel</button>
         `;
       }
       if (status === "Ongoing") {
-        return `<button class="action-btn" type="button" data-provider-booking-action="Completed" data-booking-id="${escapeHTML(b.id)}">Mark Completed</button>`;
+        return `
+          <button class="action-btn" type="button" data-provider-booking-action="Completed" data-booking-id="${escapeHTML(b.id)}">Mark Completed</button>
+          <button class="action-btn" type="button" data-provider-booking-action="Cancelled" data-booking-id="${escapeHTML(b.id)}">Cancel</button>
+        `;
       }
       if (status === "Completed") return `<span class="muted tiny">Waiting for client confirmation → Closed</span>`;
       if (status === "Closed") return `<span class="muted tiny">Closed</span>`;
@@ -385,7 +425,7 @@ export function renderProviderDashboard() {
 }
 
 /* ---------------------------
-  Profile actions (unchanged)
+  Profile actions (placeholders)
 ---------------------------- */
 export function providerLoadProfileForm() {}
 export function providerSaveProfile() {}
@@ -415,7 +455,6 @@ export async function providerRequestVerification() {
 
   saveArray(K.verifyRequests, state.verifyRequests);
 
-  // ✅ Notify admin
   addNotification({
     toRole: "admin",
     toId: "admin",

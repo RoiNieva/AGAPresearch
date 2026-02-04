@@ -68,7 +68,9 @@ function findProviderConflicts(providerId, date, timeText) {
     if (!br) return true;
     return overlaps(reqRange, br);
   });
+  
 }
+
 
 export function openBooking(providerId) {
   state.bookingDraft.providerId = providerId;

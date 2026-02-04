@@ -615,20 +615,32 @@ textarea{ resize:vertical; }
 .tiny{ font-size:.88rem; }
 .mini-title{ margin:0 0 8px; font-weight:900; }
 
-.two-col{ 
-  display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; 
-
+.two-col{
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
 }
 
-@media(min-width:940px){ .two-col{ grid-template-columns: 1fr; } }
+@media (max-width: 640px){
+  .two-col{
+    grid-template-columns: 1fr !important;
+  }
+}
 
 .list{ margin:0; padding-left:18px; }
 
-.auth-role {
-  cursor: pointer;
-  position: relative;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.auth-role-pick {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
+
+@media (max-width: 640px) {
+  .auth-role-pick {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* Remove native radio appearance */
 .auth-role input[type="radio"] {
@@ -1256,3 +1268,28 @@ body.dark .pill { background: rgba(255,255,255,.05); }
 }
 #booking-guest-notice { margin: 10px 0; }
 
+/* Role cards: side-by-side on desktop, stacked on mobile */
+.auth-role-pick{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 640px){
+  .auth-role-pick{
+    grid-template-columns: 1fr;
+  }
+}
+.auth-container {
+  width: 100%;
+  max-width: 720px;        /* desktop width */
+  padding: 24px;
+  margin: 0 auto;          /* center */
+}
+
+@media (max-width: 640px) {
+  .auth-container {
+    max-width: 100%;       /* full width on mobile */
+    padding: 16px;
+  }
+}
