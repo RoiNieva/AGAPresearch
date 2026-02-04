@@ -1,4 +1,4 @@
-// js/auth.js
+
 import { val } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray, setSession } from "./storage.js";

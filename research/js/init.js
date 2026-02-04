@@ -1,4 +1,4 @@
-// js/init.js
+
 import { state } from "./state.js";
 import { K, saveArray } from "./storage.js";
 import { updateNav, updateBell } from "./nav.js";

@@ -1,16 +1,11 @@
-// js/notifications.js
+
 import { state } from "./state.js";
 import { K, saveArray, getSession } from "./storage.js";
 import { makeId } from "./utils.js";
 
 function now() { return Date.now(); }
 
-/**
- * Notification model:
- * {
- *   id, toRole, toId, title, message, linkPage, createdAt, readAt
- * }
- */
+
 export function addNotification({ toRole, toId, title, message, linkPage = "" }) {
   if (!toRole || !toId || !title) return;
 

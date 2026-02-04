@@ -1,4 +1,3 @@
-// js/search.js
 import { byId, val } from "./dom.js";
 import { state, SERVICE_CATALOG } from "./state.js";
 import { K, saveArray, getSession } from "./storage.js";
@@ -23,11 +22,7 @@ export function initAdvancedFiltersToggle() {
   });
 }
 
-/**
- * Populate dropdowns for Client search filters:
- *  - #client-category
- *  - #client-service (dependent on selected category)
- */
+
 export function initClientSearchFilters() {
   const catSel = byId("client-category");
   const svcSel = byId("client-service");

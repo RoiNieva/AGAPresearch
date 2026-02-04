@@ -1,4 +1,4 @@
-// js/booking.js
+
 import { byId, val } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray, getSession } from "./storage.js";

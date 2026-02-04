@@ -1,5 +1,5 @@
 export function initSiteBackground() {
-  // Load-in animation trigger
+
   requestAnimationFrame(() => {
     document.body.classList.add("loaded");
   });

@@ -1,4 +1,4 @@
-// js/admin.js
+
 import { byId } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray } from "./storage.js";
@@ -186,5 +186,4 @@ function installAdminDelegation() {
     }
   }, true);
 }
-
 installAdminDelegation();

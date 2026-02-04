@@ -1,4 +1,4 @@
-// js/map.js
+
 import { loadGoogleMaps } from "./mapsLoader.js";
 import { state } from "./state.js";
 import { showToast, escapeHTML } from "./utils.js";

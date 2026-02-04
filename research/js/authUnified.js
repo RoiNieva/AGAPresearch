@@ -1,4 +1,4 @@
-// js/authUnified.js
+
 import { byId, val } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray, setSession } from "./storage.js";

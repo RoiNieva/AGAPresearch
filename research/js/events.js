@@ -1,4 +1,4 @@
-// js/events.js
+
 import { showPage, goHome, goBack } from "./routing.js";
 import { toggleTheme } from "./theme.js";
 import { openNotifications } from "./nav.js";

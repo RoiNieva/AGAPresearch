@@ -1,4 +1,3 @@
-// js/providerSignupWizard.js
 import { byId, val } from "./dom.js";
 import { state } from "./state.js";
 
@@ -142,6 +141,5 @@ export function initProviderSignupWizard() {
     showStep(Math.max(step - 1, 0));
   });
 
-  // Start at first step
   showStep(0);
 }

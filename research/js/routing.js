@@ -1,9 +1,8 @@
-// js/routing.js
 import { byId } from "./dom.js";
 import { getSession } from "./storage.js";
 import { closeMobileMenu } from "./nav.js";
 import { animatePageEnter } from "./motion.js";
-
+import { setActiveNav } from "./nav.js";
 import {
   providerSetTab,
   renderProviderDashboard,
@@ -17,9 +16,7 @@ import { populateReviewProviders, renderReviewsList } from "./reviews.js";
 import { buildCategoryGrid } from "./search.js";
 import { renderAdmin } from "./admin.js";
 
-/* ---------------------------
-   Simple page history
----------------------------- */
+
 let currentPage = "home";
 const historyStack = ["home"];
 
@@ -35,9 +32,7 @@ export function goBack() {
   navigate(prev, { push: false });
 }
 
-/* ---------------------------
-   Core visibility control
----------------------------- */
+
 export function showOnly(pageId) {
   byId("landing-page")?.classList.add("hidden");
   byId("agap-section")?.classList.add("hidden");
@@ -51,6 +46,7 @@ export function showOnly(pageId) {
   el.focus({ preventScroll: true });
 
   animatePageEnter(el);
+  setActiveNav(pageId);
 }
 
 function showHomeOnly() {

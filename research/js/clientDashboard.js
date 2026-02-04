@@ -1,4 +1,4 @@
-// js/clientDashboard.js
+
 import { byId } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray, getSession } from "./storage.js";

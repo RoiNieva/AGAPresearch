@@ -1,4 +1,3 @@
-// js/state.js
 import { K, loadArray } from "./storage.js";
 
 export const SERVICE_CATALOG = {

@@ -1,4 +1,4 @@
-// js/app.js
+
 import { applyTheme } from "./theme.js";
 import { setupMobileNav, setupAccessibleLogo, updateNav, updateBell } from "./nav.js";
 

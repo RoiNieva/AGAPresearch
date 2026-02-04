@@ -6,10 +6,7 @@ export function initPageLoadMotion() {
   });
 }
 
-/**
- * Adds reveal animations to the whole site.
- * Call this on initial load + after you change pages.
- */
+
 export function initScrollRevealMotion(root = document) {
   const targets = root.querySelectorAll(
     [
@@ -65,16 +62,14 @@ export function applyStagger(container, stepMs = 55) {
   });
 }
 
-/**
- * Page enter animation for showOnly()
- */
+
 export function animatePageEnter(el) {
   if (!el) return;
   el.classList.remove("page-enter");
-  // force reflow to restart animation
+  
   void el.offsetWidth;
   el.classList.add("page-enter");
 
-  // Also attach reveals inside the page so content animates
+ 
   initScrollRevealMotion(el);
 }

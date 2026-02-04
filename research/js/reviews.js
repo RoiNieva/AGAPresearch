@@ -1,4 +1,3 @@
-// js/reviews.js
 import { byId, val } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray } from "./storage.js";
@@ -39,7 +38,6 @@ export function populateReviewProviders() {
 }
 
 export function openReviewForProvider(providerId) {
-  // ✅ Use your router hook
   window.__routerShowPage?.("reviews-page");
   const sel = byId("review-provider");
   if (sel) sel.value = providerId;
@@ -146,10 +144,7 @@ export function resetReviews() {
   alert("Reviews reset.");
 }
 
-/**
- * ✅ Delegated handler for Flag buttons
- * No need to add a case in events.js
- */
+
 function installReviewDelegation() {
   document.addEventListener("click", (e) => {
     const el = e.target.closest("[data-flag-review]");

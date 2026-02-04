@@ -169,6 +169,11 @@ nav{
   transition: transform var(--durFast) var(--ease), background-color var(--dur) var(--ease),
               border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
+.nav-link.nav-active{
+  border-color: rgba(13,148,136,.75);
+  box-shadow: 0 0 0 3px rgba(13,148,136,.12);
+}
+
 .nav-link:hover{ transform:translateY(-1px); border-color:rgba(13,148,136,.35); }
 .nav-link:active{ transform:translateY(0px) scale(.99); }
 .nav-cta{ border-color:rgba(13,148,136,0.35); }
