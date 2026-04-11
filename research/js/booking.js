@@ -109,6 +109,7 @@ export async function submitBooking() {
   if (!sess || sess.role !== "client") {
     window.__redirectAfterAuth = "booking-page";
     alert("Please sign in as a Client to submit your booking.");
+    
     return showPage("client-auth");
   }
 

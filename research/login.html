@@ -509,41 +509,90 @@
 
     <!-- BOOKING PAGE -->
     <section id="booking-page" class="page hidden">
-      <div class="container">
-        <div class="card wide-card">
-          <button class="back-link" data-page="client-search">← Back to results</button>
+  <div class="container">
+    <div class="card wide-card booking-layout">
+      <button class="back-link" data-page="client-search">← Back to results</button>
+
+      <div class="booking-head">
+        <div>
           <h2>Book a Provider</h2>
           <p class="muted" id="booking-provider-line">Provider:</p>
+        </div>
 
-          <label class="field-label" for="booking-service">Service</label>
-          <select id="booking-service"></select>
+        <div class="booking-summary" id="bookingSummary">
+          <div class="mini-title">Summary</div>
+          <div class="muted tiny" id="bookingSummaryText">Fill out details to preview.</div>
+        </div>
+      </div>
 
-          <label class="field-label" for="booking-date">Preferred Date</label>
-          <input id="booking-date" type="date" />
+      <!-- Inline error area -->
+      <div id="bookingErrors" class="form-errors hidden" role="alert" aria-live="polite"></div>
 
-          <label class="field-label" for="booking-time">Preferred Time</label>
-          <input id="booking-time" type="text" placeholder="e.g. 1pm-3pm" />
+      <!-- Step tabs -->
+      <div class="booking-steps">
+        <button class="tab-btn tab-active" type="button" id="bookStep1Btn">1) Details</button>
+        <button class="tab-btn" type="button" id="bookStep2Btn">2) Location & Notes</button>
+      </div>
 
-          <label class="field-label" for="booking-address">Address (optional)</label>
-          <input id="booking-address" type="text" placeholder="Street / Barangay / City" />
+      <!-- Step 1 -->
+      <div id="booking-step-1" class="booking-step">
+        <label class="field-label" for="booking-service">Service</label>
+        <select id="booking-service"></select>
 
-          <label class="field-label">Pin Location</label>
-          <button class="secondary-btn" type="button" data-action="useMyLocation">📍 Use My Current Location</button>
+        <div class="two-col">
+          <div>
+            <label class="field-label" for="booking-date">Preferred Date</label>
+            <input id="booking-date" type="date" />
+          </div>
+          <div>
+            <label class="field-label" for="booking-time">Preferred Time</label>
+            <input id="booking-time" type="text" placeholder="e.g. 1pm-3pm" />
+            <div class="muted tiny">Tip: use a time range for best matching.</div>
+          </div>
+        </div>
+
+        <label class="field-label" for="booking-address">Address</label>
+        <input id="booking-address" type="text" placeholder="Street / Barangay / City" />
+
+        <div class="booking-actions">
+          <button class="primary-btn" type="button" id="bookingNextBtn">Continue</button>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="booking-step-2" class="booking-step hidden">
+        <div class="card soft">
+          <div class="mini-title">Pin Location (Optional)</div>
+          <p class="muted tiny">
+            Adding a pin helps providers find you faster. You can still book without it.
+          </p>
+
+          <button class="secondary-btn" type="button" data-action="useMyLocation">
+            📍 Use My Current Location
+          </button>
           <p class="muted tiny" id="location-status">No pinned location yet.</p>
 
           <input type="hidden" id="booking-lat" />
           <input type="hidden" id="booking-lng" />
+        </div>
 
-          <label class="field-label" for="booking-notes">Notes (optional)</label>
-          <textarea id="booking-notes" rows="4" placeholder="Describe the issue / request..."></textarea>
+        <label class="field-label" for="booking-notes">Notes (Optional)</label>
+        <textarea id="booking-notes" rows="4" placeholder="Describe the issue / request..."></textarea>
 
-          <label class="field-label" for="booking-photo">Photo (optional)</label>
-          <input id="booking-photo" type="file" accept="image/*" />
+        <label class="field-label" for="booking-photo">Photo (Optional)</label>
+        <input id="booking-photo" type="file" accept="image/*" />
 
-          <button class="primary-btn" data-action="submitBooking">Send Booking Request</button>
+        <div class="booking-actions two-col">
+          <button class="secondary-btn" type="button" id="bookingBackBtn">Back</button>
+          <button class="primary-btn" type="button" data-action="submitBooking" id="bookingSubmitBtn">
+            Send Booking Request
+          </button>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
 
     <!-- CLIENT DASHBOARD -->
     <section id="client-dashboard" class="page hidden">

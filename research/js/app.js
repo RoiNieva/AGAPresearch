@@ -1,15 +1,17 @@
-
 import { applyTheme } from "./theme.js";
 import { setupMobileNav, setupAccessibleLogo, updateNav, updateBell } from "./nav.js";
-
 import { initAdvancedFiltersToggle, initClientSearchFilters } from "./search.js";
 import { initApp } from "./init.js";
 import { bindAllEvents } from "./events.js";
-
 import { initProviderSignupWizard } from "./providerSignupWizard.js";
 import { initProviderServicePickers, installProviderServicesDelegation } from "./providerServices.js";
 import { initAuthUnifiedUI } from "./authUnified.js";
 import { initPageLoadMotion, initScrollRevealMotion } from "./motion.js";
+import { initBookingUX } from "./bookingUX.js";
+import { setupToast } from "./ui.js"; 
+
+
+
 
 function initUnifiedSignupRoleToggle(){
   const clientBox = document.getElementById("auth-signup-client");
@@ -30,8 +32,6 @@ function initUnifiedSignupRoleToggle(){
 }
 
 
-
-
 document.addEventListener("DOMContentLoaded", async () => {
   applyTheme();
   setupMobileNav();
@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   initScrollRevealMotion(document);
   bindAllEvents();
   initAuthUnifiedUI();
-
+  initBookingUX();
+  setupToast();
   // Provider signup UI
   initProviderSignupWizard();
   initProviderServicePickers();
@@ -52,6 +53,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Nav state
   updateNav?.();
   updateBell?.();
-
   await initApp();
 });

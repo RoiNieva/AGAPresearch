@@ -86,7 +86,13 @@ function renderProviderMarkers() {
       </div>
     `;
 
-    const info = new window.google.maps.InfoWindow({ content: infoHtml });
+
+    const info = new window.google.maps.InfoWindow({ content: `
+    <div class="gm-info">
+      <div class="gm-info-title">${provider.profile?.name || "Provider"}</div>
+      <div class="gm-info-meta">📍 ${provider.profile?.city || ""}</div>
+    </div>
+  ` });
 
     marker.addListener("click", () => {
       info.open({ map, anchor: marker });
