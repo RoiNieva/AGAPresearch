@@ -924,3 +924,155 @@ body.dark .stats-card{
 @media (max-width: 620px){
   .stats-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* =========================================
+   AUTH ANIMATIONS & TRANSITIONS (NEW)
+========================================= */
+
+/* Smooth page fade-in */
+#auth-signin.page-enter,
+#auth-signup.page-enter {
+  animation: authPageFadeIn 380ms var(--ease) forwards;
+}
+
+@keyframes authPageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Staggered input fields animation */
+#auth-signin input,
+#auth-signup input {
+  animation: slideInLeft 400ms var(--ease) forwards;
+  opacity: 0;
+}
+
+#auth-signin input:nth-of-type(1) { animation-delay: 100ms; }
+#auth-signin input:nth-of-type(2) { animation-delay: 180ms; }
+#auth-signup input:nth-of-type(1) { animation-delay: 100ms; }
+#auth-signup input:nth-of-type(2) { animation-delay: 180ms; }
+#auth-signup input:nth-of-type(3) { animation-delay: 260ms; }
+#auth-signup input:nth-of-type(4) { animation-delay: 340ms; }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Button loading animation */
+.primary-btn.loading {
+  position: relative;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.primary-btn.loading::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spinLoader 650ms linear infinite;
+}
+
+@keyframes spinLoader {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Success overlay transition */
+.auth-success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 148, 136, 0.1);
+  backdrop-filter: blur(0px);
+  z-index: 5000;
+  opacity: 0;
+  transition: all 300ms var(--ease);
+  pointer-events: none;
+}
+
+.auth-success-overlay.active {
+  opacity: 1;
+  backdrop-filter: blur(6px);
+}
+
+/* Toast animations */
+.toast {
+  animation: toastSlideUp 300ms var(--ease);
+}
+
+.toast.success {
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.95), rgba(16, 185, 129, 0.9));
+  border: 1px solid rgba(13, 148, 136, 0.4);
+  box-shadow: 0 12px 40px rgba(13, 148, 136, 0.2);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(220, 38, 38, 0.9));
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 12px 40px rgba(239, 68, 68, 0.2);
+}
+
+@keyframes toastSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dashboard smooth entry */
+#client-dashboard.page-enter,
+#provider-dashboard.page-enter {
+  animation: dashboardSlideIn 400ms var(--ease) forwards;
+}
+
+@keyframes dashboardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced button interactions */
+.primary-btn:not(.loading):active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(13,148,136,.15);
+}
+
+.primary-btn:not(.loading):hover {
+  transform: translateY(-2px);
+}
+
+/* Form validation states */
+input:invalid {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+input:valid {
+  border-color: rgba(13, 148, 136, 0.3);
+}
