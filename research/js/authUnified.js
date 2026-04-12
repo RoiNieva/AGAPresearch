@@ -1,10 +1,10 @@
-
 import { byId, val } from "./dom.js";
 import { state } from "./state.js";
 import { K, saveArray, setSession } from "./storage.js";
 import { makeId } from "./utils.js";
 import { updateNav, updateBell } from "./nav.js";
-import { showPage, goHome } from "./routing.js";
+import { showPage } from "./routing.js";
+import { showToast } from "./ui.js";
 
 async function hashPassword(password) {
   let h = 5381;
@@ -17,10 +17,9 @@ function getCheckedRole(name) {
 }
 
 export function initAuthUnifiedUI() {
-  // Toggle signup boxes based on role selection
   const radios = [...document.querySelectorAll('input[name="auth-signup-role"]')];
-  const clientBox = byId("client-signup-box");
-  const providerBox = byId("provider-signup-box");
+  const clientBox = byId("auth-signup-client");
+  const providerBox = byId("auth-signup-provider");
 
   function sync() {
     const role = getCheckedRole("auth-signup-role");
@@ -33,77 +32,149 @@ export function initAuthUnifiedUI() {
   sync();
 }
 
-/* -------------------------
-   Unified SIGN IN
--------------------------- */
+/* ✨ FIXED: Smooth animation + direct dashboard redirect */
 export async function authUnifiedSignIn() {
-  const email = val("auth-login-email").toLowerCase();
+  const email = val("auth-login-email").toLowerCase().trim();
   const pass = byId("auth-login-password")?.value || "";
   const role = getCheckedRole("auth-login-role");
 
-  if (!email || !pass) return alert("Enter email and password.");
-  if (!role) return alert("Choose a role.");
+  // Validation
+  if (!email || !email.includes("@")) {
+    showToast("Please enter a valid email.", "error");
+    return;
+  }
+  if (!pass) {
+    showToast("Please enter your password.", "error");
+    return;
+  }
+  if (!role) {
+    showToast("Please select a role.", "error");
+    return;
+  }
 
-  // Admin demo stays (optional)
+  // Admin demo
   if (email === "admin@agap.com" && pass === "admin123") {
-    setSession({ role: "admin", id: "admin" });
-    updateNav(); updateBell();
-    return showPage("admin-page");
+    animateAuthSuccess(() => {
+      setSession({ role: "admin", id: "admin" });
+      updateNav(); updateBell();
+      showPage("admin-page");
+    });
+    return;
   }
 
   if (role === "client") {
     const c = state.clients.find(x => x.email === email);
-    if (!c) return alert("Client account not found.");
-    if ((await hashPassword(pass)) !== c.passHash) return alert("Wrong password.");
+    if (!c) {
+      showToast("Client account not found.", "error");
+      return;
+    }
+    if ((await hashPassword(pass)) !== c.passHash) {
+      showToast("Wrong password.", "error");
+      return;
+    }
 
-    setSession({ role:"client", id: c.id });
-    updateNav(); updateBell();
-    return goHome();
+    animateAuthSuccess(() => {
+      setSession({ role: "client", id: c.id });
+      updateNav(); updateBell();
+      showPage("client-dashboard");
+    });
+    return;
   }
 
   if (role === "provider") {
     const p = state.providers.find(x => x.email === email);
-    if (!p) return alert("Provider account not found.");
-    if ((await hashPassword(pass)) !== p.passHash) return alert("Wrong password.");
+    if (!p) {
+      showToast("Provider account not found.", "error");
+      return;
+    }
+    if ((await hashPassword(pass)) !== p.passHash) {
+      showToast("Wrong password.", "error");
+      return;
+    }
 
-    setSession({ role:"provider", id: p.id });
-    updateNav(); updateBell();
-    return showPage("provider-dashboard");
+    animateAuthSuccess(() => {
+      setSession({ role: "provider", id: p.id });
+      updateNav(); updateBell();
+      showPage("provider-dashboard");
+    });
+    return;
   }
-
-  alert("Invalid role.");
 }
 
-/* -------------------------
-   Unified SIGN UP (Client)
--------------------------- */
+/* ✨ FIXED: Smooth animation + direct dashboard redirect */
 export async function authUnifiedClientSignUp() {
   const role = getCheckedRole("auth-signup-role");
-  if (role !== "client") return alert("Choose Client to create client account here.");
+  if (role !== "client") {
+    showToast("Select 'Client' for this form.", "error");
+    return;
+  }
 
-  const name = val("auth-signup-name");
-  const email = val("auth-signup-email").toLowerCase();
+  const name = val("auth-signup-name").trim();
+  const email = val("auth-signup-email").toLowerCase().trim();
   const pass = byId("auth-signup-password")?.value || "";
   const pass2 = byId("auth-signup-password2")?.value || "";
 
-  if (!name || !email || !pass || !pass2) return alert("Fill all fields.");
-  if (pass !== pass2) return alert("Passwords do not match.");
-  if (state.clients.some(c => c.email === email)) return alert("Email already exists.");
+  if (!name) {
+    showToast("Please enter your name.", "error");
+    return;
+  }
+  if (!email || !email.includes("@")) {
+    showToast("Please enter a valid email.", "error");
+    return;
+  }
+  if (!pass || pass.length < 6) {
+    showToast("Password must be 6+ characters.", "error");
+    return;
+  }
+  if (pass !== pass2) {
+    showToast("Passwords do not match.", "error");
+    return;
+  }
+  if (state.clients.some(c => c.email === email)) {
+    showToast("Email already exists.", "error");
+    return;
+  }
 
-  const client = { id: makeId(), name, email, passHash: await hashPassword(pass), createdAt: Date.now() };
+  const client = {
+    id: makeId(),
+    name,
+    email,
+    passHash: await hashPassword(pass),
+    createdAt: Date.now()
+  };
+
   state.clients.push(client);
   saveArray(K.clients, state.clients);
 
-  setSession({ role:"client", id: client.id });
-  updateNav(); updateBell();
-  goHome();
+  animateAuthSuccess(() => {
+    setSession({ role: "client", id: client.id });
+    updateNav(); updateBell();
+    showPage("client-dashboard");
+  });
 }
 
-/* -------------------------
-   Unified SIGN UP (Provider)
--------------------------- */
 export function authUnifiedStartProviderSignup() {
   const role = getCheckedRole("auth-signup-role");
-  if (role !== "provider") return alert("Choose Provider first.");
+  if (role !== "provider") {
+    showToast("Select 'Provider' first.", "error");
+    return;
+  }
   showPage("provider-signup");
+}
+
+/* ✨ Smooth transition animation */
+function animateAuthSuccess(callback) {
+  const overlay = document.createElement("div");
+  overlay.className = "auth-success-overlay";
+  document.body.appendChild(overlay);
+  
+  setTimeout(() => {
+    overlay.classList.add("active");
+  }, 10);
+  
+  setTimeout(() => {
+    callback();
+    overlay.classList.remove("active");
+    setTimeout(() => overlay.remove(), 300);
+  }, 400);
 }
